@@ -1,5 +1,9 @@
 # gzip
 
+[![Build Status](https://travis-ci.org/cldellow/gzip.svg?branch=master)](https://travis-ci.org/cldellow/gzip)
+[![codecov](https://codecov.io/gh/cldellow/gzip/branch/master/graph/badge.svg)](https://codecov.io/gh/cldellow/gzip)
+[![Maven Central](https://img.shields.io/maven-central/v/com.cldellow/gzip.svg)](https://mvnrepository.com/artifact/com.cldellow/gzip)
+
 Emit offsets of nested GZIP streams.
 
 GZIP has the interesting property that a sequence of concatenated
@@ -13,6 +17,13 @@ The stock `java.util.zip.GZIPInputStream` class does not expose this.
 This library patches that class expose a callback which gets invoked
 with the offsets of the member streams.
 
+## Usage
+
+```
+int[] offsets = new int[100];
+
+GZIPInputStream gzis = new GZIPInputStream(is, (member, offset) -> { offsets[member] = offset; });
+```
 
 ## License
 
