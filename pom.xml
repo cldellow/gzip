@@ -5,7 +5,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.cldellow</groupId>
   <artifactId>gzip</artifactId>
-  <version>0.0.1</version>
+  <version>0.0.2</version>
   <name>com.cldellow:gzip</name>
   <url>https://github.com/cldellow/gzip</url>
   <description>Uncompress GZIP streams and expose member offsets.</description>

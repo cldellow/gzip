@@ -1,5 +1,5 @@
 package com.cldellow.zip;
 
-interface MemberOffset {
+public interface MemberOffset {
     void onMemberStart(int member, int offset);
 }
