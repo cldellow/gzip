@@ -46,6 +46,51 @@ import org.apache.commons.io.input.CountingInputStream;
  */
 public
 class GZIPInputStream extends InflaterInputStream {
+    // In http://hg.openjdk.java.net/jdk/jdk/rev/99644c75eaed#l2.44,
+    // the off/len fields were renamed to inputPos/inputLim, so try
+    // to find each of them.
+    //
+    // It may ultimately make sense to snapshot the Inflater class, too,
+    // to avoid these shenanigans.
+    private static Field lenField;
+    private static Field offField;
+
+    static {
+        {
+            Field lenFieldVal = null;
+            try {
+                lenFieldVal = Inflater.class.getDeclaredField("len");
+            } catch(NoSuchFieldException nsfe) {
+                try {
+                    lenFieldVal = Inflater.class.getDeclaredField("inputPos");
+                } catch(NoSuchFieldException nsfe2) {
+                    throw new RuntimeException(nsfe);
+                }
+            }
+
+            lenField = lenFieldVal;
+            lenField.setAccessible(true);
+        }
+
+        {
+            Field offFieldVal = null;
+            try {
+                offFieldVal = Inflater.class.getDeclaredField("off");
+            } catch(NoSuchFieldException nsfe) {
+                try {
+                    offFieldVal = Inflater.class.getDeclaredField("inputLim");
+                } catch(NoSuchFieldException nsfe2) {
+                    throw new RuntimeException(nsfe);
+                }
+            }
+
+            offField = offFieldVal;
+            offField.setAccessible(true);
+        }
+
+    }
+
+
     /**
      * CRC-32 for uncompressed data.
      */
@@ -185,12 +230,8 @@ class GZIPInputStream extends InflaterInputStream {
         // return the right spot in the stream for the 2nd and subsequent streams.
         //
         // Instead, those are .getCount() - offset + 8 (footer size)
-        Field lenField = Inflater.class.getDeclaredField("len");
-        lenField.setAccessible(true);
         int len = lenField.getInt(inflater);
 
-        Field offField = Inflater.class.getDeclaredField("off");
-        offField.setAccessible(true);
         int off = offField.getInt(inflater);
         // TODO/WARNING: This is potentially janky. The threshold was chosen by informed guess/
         // testing on a few WET files to make sure it worked. It seems reasonable given that
