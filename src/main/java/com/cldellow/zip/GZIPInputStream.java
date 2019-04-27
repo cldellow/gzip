@@ -62,7 +62,7 @@ class GZIPInputStream extends InflaterInputStream {
                 lenFieldVal = Inflater.class.getDeclaredField("len");
             } catch(NoSuchFieldException nsfe) {
                 try {
-                    lenFieldVal = Inflater.class.getDeclaredField("inputPos");
+                    lenFieldVal = Inflater.class.getDeclaredField("inputLim");
                 } catch(NoSuchFieldException nsfe2) {
                     throw new RuntimeException(nsfe);
                 }
@@ -78,7 +78,7 @@ class GZIPInputStream extends InflaterInputStream {
                 offFieldVal = Inflater.class.getDeclaredField("off");
             } catch(NoSuchFieldException nsfe) {
                 try {
-                    offFieldVal = Inflater.class.getDeclaredField("inputLim");
+                    offFieldVal = Inflater.class.getDeclaredField("inputPos");
                 } catch(NoSuchFieldException nsfe2) {
                     throw new RuntimeException(nsfe);
                 }
