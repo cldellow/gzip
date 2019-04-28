@@ -1,4 +1,16 @@
-# gzip
+# DEPRECATED
+
+_Don't use this library!_
+
+It relied on accessing internals of `java.util.zip.Inflater`, which have
+changed in JDK 11.
+
+Instead, use [GzipCompressorInputStream](https://commons.apache.org/proper/commons-compress/apidocs/org/apache/commons/compress/compressors/gzip/GzipCompressorInputStream.html)
+from Apache compress-commons. An example of how to use it is at https://github.com/cldellow/warc-service/blob/e95f8f5906c39efeb781a47b343a7cec179af7e3/src/main/scala/com/cldellow/warc/framework/WarcHandler.scala#L62
+
+
+
+## gzip
 
 [![Build Status](https://travis-ci.org/cldellow/gzip.svg?branch=master)](https://travis-ci.org/cldellow/gzip)
 [![codecov](https://codecov.io/gh/cldellow/gzip/branch/master/graph/badge.svg)](https://codecov.io/gh/cldellow/gzip)
@@ -17,7 +29,7 @@ The stock `java.util.zip.GZIPInputStream` class does not expose this.
 This library patches that class expose a callback which gets invoked
 with the offsets of the member streams.
 
-## Usage
+### Usage
 
 ```
 int[] offsets = new int[100];
@@ -25,7 +37,7 @@ int[] offsets = new int[100];
 GZIPInputStream gzis = new GZIPInputStream(is, (member, offset) -> { offsets[member] = offset; });
 ```
 
-## License
+### License
 
 This library is a fork of `java.util.zip.GZIPInputStream` as implemented
 by Oracle.
